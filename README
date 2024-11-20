@@ -12,6 +12,7 @@
 12. 增加一个binder代理的例子
 13. 增加一个调用dobby.so的例子
 14. 增加一个inlineHook检测例子
+15. 增加一个自定义linker，失败，在linked_list.h文件的push_back函数报错，见另一个仓库，代码一样
 
 ## 增加Android Studio 使用 Rust 例子
 1. cargo install cargo-ndk

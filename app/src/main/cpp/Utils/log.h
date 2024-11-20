@@ -17,4 +17,6 @@ enum logType {
 #define LOGI(...) ((void) __android_log_print(INFO,  TAG, __VA_ARGS__))
 #define LOGW(...) ((void) __android_log_print(WARN,  TAG, __VA_ARGS__))
 
+#define LinkerTrace "LinkerTrace"
+#define TRACE_TYPE(...) __android_log_print(ANDROID_LOG_ERROR,LinkerTrace,__VA_ARGS__)
 #endif // XPOSED_LOG_H

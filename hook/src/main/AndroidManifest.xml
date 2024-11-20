@@ -21,9 +21,11 @@
             android:name="xposedminversion"
             android:value="82"/>
 
+
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Android_study">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

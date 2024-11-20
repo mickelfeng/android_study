@@ -2,8 +2,6 @@ package com.android.study
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +19,9 @@ import java.io.DataOutputStream
 import java.io.File
 import java.io.FileReader
 import java.io.IOException
+import java.io.InputStreamReader
+import java.lang.reflect.Method
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,14 +37,35 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS,
     )
 
+    fun isSuCommandAvailable(): Boolean {
+        try {
+            // 使用命令行检查/sbin/su是否存在
+            val process = Runtime.getRuntime().exec("which su")
+            val reader = BufferedReader(InputStreamReader(process.inputStream))
+            val line = reader.readLine()
+
+            // 检查输出是否包含/sbin/su
+            if (line != null && line == "/sbin/su") {
+                return true // /sbin/su命令存在
+            }
+
+            reader.close()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+        return false // /sbin/su命令不存在
+    }
+
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("testUseRust", "getAppSignature: ${useRust().getAppSignature(this)}")
 
-        Log.d("versionCode",this.packageManager.getPackageInfo(this.packageName,0).versionCode.toString())
-
         //测试重定向
         try {
+            val isSuAvailable = isSuCommandAvailable()
+            println("Is /sbin/su available? $isSuAvailable")
+
+
             // 打开文件并创建 BufferedReader 对象
             val reader = BufferedReader(FileReader("/proc/meminfo"))
 
@@ -59,15 +81,12 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
 
-        //thouger test
-        val activityThreadClass = Class.forName("android.app.ActivityThread")
-
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+//        setContentView(R.layout.activity_main)
 
-        Timber.plant(Timber.DebugTree())
+//        Timber.plant(Timber.DebugTree())
 
-        System.loadLibrary("dobby")
+//        System.loadLibrary("dobby")
 
         //输出.so 目录的路径
         val soPath = applicationInfo.nativeLibraryDir
@@ -89,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         //测试native层
         System.loadLibrary("hunter64")
 
-        Log.d("detect_inlineHook", detect_inlineHook())
+//        Log.d("detect_inlineHook", detect_inlineHook())
 //
 //        val list = ArrayList<String>()
 //        list.add("hello.so")
@@ -114,28 +133,88 @@ class MainActivity : AppCompatActivity() {
 //            Toast.makeText(this, "未检测到虚拟环境", Toast.LENGTH_SHORT).show()
 //        }
 
+//        val classA = Class.forName("com.android.study.ClassA")
+//        val classB = Class.forName("com.android.study.ClassB")
+//        val srcMethod = classA.getDeclaredMethod("printMessage")
+//        val destMethod = classB.getDeclaredMethod("printMessage")
+//        srcMethod.isAccessible = true
+//        destMethod.isAccessible = true
+//        Log.d("hook_native", "before hook")
+//        ClassA().printMessage()
+//        hook_native(srcMethod, destMethod)
+//        ClassA().printMessage()
+//        Log.d("hook_native", "after hook")
 
+//        try {
+//            // 使用标准库中的类Date和Calendar替换自定义类ClassA和ClassB
+//            val classA = Class.forName("java.util.Date")
+//            val classB = Class.forName("java.util.Calendar")
+//
+//            println("ClassA loaded: ${classA.name}")
+//            println("ClassB loaded: ${classB.name}")
+//
+//            // 获取Date类中的toString方法作为srcMethod
+//            val srcMethod = classA.getDeclaredMethod("toString")
+//            // 获取Calendar类中的getInstance方法作为destMethod
+//            val destMethod = classB.getDeclaredMethod("getInstance")
+//
+//            println("srcMethod: ${srcMethod.name}")
+//            println("destMethod: ${destMethod.name}")
+//
+//            // 设置方法可访问
+//            srcMethod.isAccessible = true
+//            destMethod.isAccessible = true
+//
+//            // 调用Date类的toString方法
+//            val dateInstance = classA.getDeclaredConstructor().newInstance()
+//            val srcResult = srcMethod.invoke(dateInstance)
+//            println("srcMethod result: $srcResult")
+//
+//            // 调用Calendar类的getInstance方法
+//            val destResult = destMethod.invoke(null)
+//            println("destMethod result: $destResult")
+//
+//            // 再次调用Date类的toString方法
+//            val srcResult2 = srcMethod.invoke(classA.getDeclaredConstructor().newInstance())
+//            println("srcMethod result 2: $srcResult2")
+//
+//            println("Replacement successful")
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            println("Replacement failed")
+//        }
+        
         //内存漫游
 //        getAllObjectInfo(this, File(this.filesDir, "all_object.txt"))
-        val filter = IntentFilter("android.intent.tec.action.sendotherapp")
-        val receiver = MyBroadcastReceiver()
-        this.registerReceiver(receiver, filter)
+//        val filter = IntentFilter("android.intent.tec.action.sendotherapp")
+//        val receiver = MyBroadcastReceiver()
+//        this.registerReceiver(receiver, filter)
 
 //        test_read_file()
 
-        SeccompSVC()
+//        SeccompSVC()
 //        test()
+//        loadSo()
+        Log.d("MainActivity", "结束")
     }
 
-    external fun detect_inlineHook(): String
 
-    external fun SeccompSVC()
-    external fun Analysis(list: ArrayList<*>?, path: String?)
-    external fun native_test()
+    fun m1() {}
+    fun m2() {}
 
-    external fun listmacaddrs(): String
-
-    external fun callTestttttttttttt(str: String)
+//    private external fun hook_native(src: Method, dest: Method): Long
+//
+//    external fun loadSo()
+//
+//    external fun detect_inlineHook(): String
+//
+//    external fun SeccompSVC()
+//    external fun Analysis(list: ArrayList<*>?, path: String?)
+//    external fun native_test()
+//
+//    external fun listmacaddrs(): String
+//
+//    external fun callTestttttttttttt(str: String)
 
     external fun stringFromJNI(): String
 
@@ -219,7 +298,6 @@ class MainActivity : AppCompatActivity() {
                 ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_CODE_PERMISSIONS)
             }
         }
-
     }
 
 

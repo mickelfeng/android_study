@@ -24,3 +24,4 @@ rootProject.name = "android_study"
 include(":app")
 //include(":hook")
 include(":nativeLib")
+include(":hook")

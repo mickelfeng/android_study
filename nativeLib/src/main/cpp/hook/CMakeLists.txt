@@ -7,27 +7,27 @@ enable_language(C ASM)
 #sandhook sign hook
 add_subdirectory(signhook)
 
-##add dobby lib
-#string(REGEX REPLACE "(.*)/nativeLib/src.*" "\\1" HOMEPATH ${PROJECT_SOURCE_DIR})
-##设置路径,引入Dobby
-#include_directories(
-#        ${DobbyHome}/include
-#        ${DobbyHome}/source
-#        ${DobbyHome}/builtin-plugin
-#        ${DobbyHome}/builtin-plugin/AndroidRestriction
-#        ${DobbyHome}/builtin-plugin/SymbolResolver
-#        ${DobbyHome}/external/logging
-#)
-#macro(SET_OPTION option value)
-#    set(${option} ${value} CACHE INTERNAL "" FORCE)
-#endmacro()
-## 关闭DobbyDebug日志
-#SET_OPTION(DOBBY_DEBUG NO)
-## 关闭shared库,和我们的so 集成到一起。
-#SET_OPTION(DOBBY_GENERATE_SHARED OFF)
-##是否加载linker加载so的回调
-#SET_OPTION(Plugin.LinkerLoadCallback OFF)
-#add_subdirectory(Dobby)
+#add dobby lib
+string(REGEX REPLACE "(.*)/nativeLib/src.*" "\\1" HOMEPATH ${PROJECT_SOURCE_DIR})
+#设置路径,引入Dobby
+include_directories(
+        ${DobbyHome}/include
+        ${DobbyHome}/source
+        ${DobbyHome}/builtin-plugin
+        ${DobbyHome}/builtin-plugin/AndroidRestriction
+        ${DobbyHome}/builtin-plugin/SymbolResolver
+        ${DobbyHome}/external/logging
+)
+macro(SET_OPTION option value)
+    set(${option} ${value} CACHE INTERNAL "" FORCE)
+endmacro()
+# 关闭DobbyDebug日志
+SET_OPTION(DOBBY_DEBUG NO)
+# 关闭shared库,和我们的so 集成到一起。
+SET_OPTION(DOBBY_GENERATE_SHARED OFF)
+#是否加载linker加载so的回调
+SET_OPTION(Plugin.LinkerLoadCallback OFF)
+add_subdirectory(Dobby)
 
 
 
@@ -68,7 +68,7 @@ set_target_properties(
 target_link_libraries(
         runtimehook
         runtimehook_imported
-#        dobby #dobby
+        dobby #dobby
         signhook #sandhook sign hook
         dlfc
         ${log-lib}

@@ -5,10 +5,10 @@ project("thouger")
 enable_language(C ASM)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-narrowing -std=c++20")
-#开始优化
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O")
-# inline
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden")
+##开始优化
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O")
+## inline
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden")
 
 
 #32位和64位实现在不同文件,方便区分。
@@ -28,4 +28,6 @@ ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/cpp)
 ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/cpp/hello)
 ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/cpp/other)
 #基础库组件
-ADD_SUBDIRECTORY(${HomePath}/nativeLib/src/main/cpp/ nativeLib.out)
+#ADD_SUBDIRECTORY(${HomePath}/nativeLib/src/main/cpp/ nativeLib.out)
+
+
